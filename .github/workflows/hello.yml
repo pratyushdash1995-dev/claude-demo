@@ -1,0 +1,33 @@
+name: Hello Actions
+
+# When should this workflow run?
+on:
+  push:
+    branches: [main]        # every push to main
+  pull_request:             # every PR
+  workflow_dispatch:        # manual "Run workflow" button in the Actions tab
+    inputs:
+      name:
+        description: "Who should we greet?"
+        required: false
+        default: "world"
+
+jobs:
+  greet:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Say hello
+        run: echo "Hello, ${{ github.event.inputs.name || 'world' }}!"
+
+      - name: Show some context
+        run: |
+          echo "Event:  ${{ github.event_name }}"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Actor:  ${{ github.actor }}"
+          echo "Commit: ${{ github.sha }}"
+
+      - name: List repo files
+        run: ls -la
